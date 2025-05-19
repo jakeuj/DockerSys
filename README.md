@@ -67,6 +67,50 @@ npm start
 
 3. 打开浏览器访问 http://localhost:3000
 
+## Docker权限问题解决
+
+如果遇到 `获取容器统计信息失败: Error: connect EACCES /var/run/docker.sock` 错误，这是因为您的用户没有权限访问Docker socket。解决方法：
+
+### 方法1：使用提供的权限设置脚本
+
+我们提供了一个脚本来自动设置权限：
+
+```
+cd backend
+sudo ./setup_permissions.sh
+```
+
+运行脚本后，**您需要注销并重新登录**以使更改生效，或者运行 `newgrp docker` 命令。
+
+### 方法2：手动设置权限
+
+如果您希望手动设置权限，可以执行以下步骤：
+
+1. 将当前用户添加到docker组：
+```
+sudo usermod -aG docker $USER
+```
+
+2. 注销并重新登录以使更改生效，或运行：
+```
+newgrp docker
+```
+
+3. 重启Docker服务：
+```
+sudo systemctl restart docker
+```
+
+### 方法3：临时解决方案
+
+如果只是临时测试，可以使用sudo运行应用：
+
+```
+sudo npm start
+```
+
+**注意**：使用sudo运行Node.js应用不推荐用于生产环境。
+
 ## 注意事项
 
 - 后端服务需要有权限访问 Docker socket（通常位于 `/var/run/docker.sock`）

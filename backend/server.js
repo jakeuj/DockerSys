@@ -1,10 +1,27 @@
 const express = require('express');
 const cors = require('cors');
 const Docker = require('dockerode');
+const fs = require('fs');
 
 const app = express();
 const port = process.env.PORT || 5001;
-const docker = new Docker();
+
+// 检查Docker socket是否存在且可访问
+const socketPath = '/var/run/docker.sock';
+let docker;
+
+try {
+  // 尝试访问Docker socket
+  fs.accessSync(socketPath, fs.constants.R_OK | fs.constants.W_OK);
+  docker = new Docker({ socketPath });
+  console.log('成功连接到Docker守护进程');
+} catch (err) {
+  console.error(`Docker socket访问失败: ${err.message}`);
+  console.error('请确保当前用户已添加到docker组，或使用sudo运行');
+  console.error('解决方法: sudo usermod -aG docker $USER 然后重新登录');
+  // 创建一个空的Docker实例，这样应用程序不会在启动时崩溃
+  docker = new Docker();
+}
 
 app.use(cors());
 app.use(express.json());
