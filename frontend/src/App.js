@@ -81,7 +81,12 @@ function App() {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+              <img 
+                src="/logo.png" 
+                alt="Logo" 
+                style={{ height: '60px', marginRight: '10px' }} 
+              />
               Docker容器监控系统
             </Typography>
             <Box sx={{ mr: 2 }}>
